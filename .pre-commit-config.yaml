@@ -1,4 +1,4 @@
-# Install: pip intsall pre-commit && pre-commit install
+# Install: pip install pre-commit && pre-commit install
 # Run manually: pre-commit run --all-files
 #               pre-commit run --files <specific-file-name>   
 # Update hooks: pre-commit autoupdate
@@ -10,7 +10,7 @@ default_stages: [commit, push]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.5.0  # Consider autoupdate to v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -20,8 +20,8 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
       - id: debug-statements
-      - id: check-merge-conflicts
-      - id: check-case-conflicts
+      - id: check-merge-conflict
+      - id: check-case-conflict
   
   # Remove unused imports and variables
   - repo: https://github.com/PYCQA/autoflake
@@ -29,16 +29,24 @@ repos:
     hooks:
       - id: autoflake
         args: 
-        - --remove-all-unused-imports 
-        - --ignore-init-module-imports 
-        - --remove-unused-variables
-        - --in-place
+          - --remove-all-unused-imports 
+          - --ignore-init-module-imports 
+          - --remove-unused-variables
+          - --in-place
 
   # Code Formatting with Black
   - repo: https://github.com/psf/black
     rev: 23.12.1
     hooks:
       - id: black
-        langugae_version: python3.11
+        language_version: python3.11
       - id: black-jupyter
-        additional_dependencies: ['black[jupyter]']
+        additional_dependencies: ["black[jupyter]"]
+
+  # Secret Detection
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: .*/tests/.*  # exclude test files
