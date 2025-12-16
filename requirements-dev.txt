@@ -1,0 +1,19 @@
+# Developement dependencies for pre-commit hooks and testing
+
+#remove unused imports
+autoflake==2.2.0
+
+# Code Formatting
+black[juypter]==23.12.0
+
+# Coverage reporting
+coverage[toml]>=7.3.0
+
+# Secret detection
+detect-secrets>=1.4.0
+
+# Pre-commit framework
+pre-commit>=3.6.0
+
+# Linting
+ruff>=0.1.11

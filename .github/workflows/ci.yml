@@ -1,0 +1,59 @@
+name: CI/CD Pipeline
+
+on:
+    push:
+        branches: [main,dev]
+    pull_request:
+        branches: [main,dev]
+    workflow_dispatch:
+
+env:
+    PYTHON_VERSION: '3.11'
+    CACHE_NUMBER: 1
+
+jobs:
+    quality:
+        name: Code Quality Checks
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v3
+                with:
+                    fetch-depth: 0  # Fetch all history for accurate pre-commit checks
+            
+            -   name: Set up Python
+                uses: actions/setup-python@v5
+                with:
+                    python-version: ${{ env.PYTHON_VERSION }}
+                    
+            -   name: Cache Dependencies
+                uses: actions/cache@v4
+                id: cache
+                with:
+                    path: |
+                        ~/.cache/pip
+                        ~/.cache/pre-commit
+                    key: ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}-${{ hashFiles('**/requirements-dev.txt', '**/pyproject.toml') }}
+                    restore-keys: |
+                        ${{ runner.os }}-pip-${{ env.CACHE_NUMBER }}-
+
+            -   name: Install dependencies
+                run: |
+                    python -m pip install --upgrade pip setuptools wheel
+                    pip install -r requirements-dev.txt
+            
+            -   name: Run Pre-commit hooks
+                run: |
+                    pre-commit run --all-files --show-diff-on-failure
+
+
+    lint-summary:
+        name: Lint Summary
+        needs: [quality]
+        if: always()
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Check quality job status
+                if : needs.quality.result != 'success'
+                run: exit 1
+            -   name: All checks passed
+                run: echo "All quality checks passed successfully!"
