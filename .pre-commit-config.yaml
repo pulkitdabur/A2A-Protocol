@@ -1,10 +1,10 @@
 # Install: pip install pre-commit && pre-commit install
 # Run manually: pre-commit run --all-files
-#               pre-commit run --files <specific-file-name>   
+#               pre-commit run --files <specific-file-name>
 # Update hooks: pre-commit autoupdate
 
 default_language_version:
-  python: python3.11
+  python: python3.13
 
 default_stages: [commit, push]
 
@@ -22,15 +22,15 @@ repos:
       - id: debug-statements
       - id: check-merge-conflict
       - id: check-case-conflict
-  
+
   # Remove unused imports and variables
   - repo: https://github.com/PYCQA/autoflake
     rev: v2.2.1
     hooks:
       - id: autoflake
-        args: 
-          - --remove-all-unused-imports 
-          - --ignore-init-module-imports 
+        args:
+          - --remove-all-unused-imports
+          - --ignore-init-module-imports
           - --remove-unused-variables
           - --in-place
 
@@ -39,7 +39,7 @@ repos:
     rev: 23.12.1
     hooks:
       - id: black
-        language_version: python3.11
+        language_version: python3.13
       - id: black-jupyter
         additional_dependencies: ["black[jupyter]"]
 
@@ -50,3 +50,4 @@ repos:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
         exclude: .*/tests/.*  # exclude test files
+        additional_dependencies: [gibberish-detector]
