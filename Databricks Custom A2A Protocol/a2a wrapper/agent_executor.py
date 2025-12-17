@@ -94,7 +94,7 @@ class A2AWrapperAgentExecutor(AgentExecutor):
 
         except Exception as e:
             logger.error(f"An error occurred while streaming the response: {e}")
-            await updater.upate_status(
+            await updater.update_status(
                 TaskState.failed,
                 new_agent_text_message(
                     "An internal error occurred.", task.context_id, task.id
