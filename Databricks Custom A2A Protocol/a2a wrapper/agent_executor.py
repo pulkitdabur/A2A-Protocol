@@ -34,29 +34,29 @@ class A2AWrapperAgentExecutor(AgentExecutor):
         # self.DATABRICKS_TOKEN = dbutils.secret.get(scope=SCOPE_NAME, key=TOKEN)
         self.AGENT_ENDPOINT = AGENT_ENDPOINT
 
+    async def model_serving_model(self, user_message: str) -> str:
+        payload = {"inputs": [{"role": "user", "content": user_message}]}
+        headers = {
+            "Authorization": f"Bearer {self.DATABRICKS_TOKEN}",
+            "Content-Type": "application/json",
+        }
+        response = requests.post(
+            self.AGENT_ENDPOINT, headers=headers, json=payload, timeout=60
+        )
+        if response.status_code != 200:
+            raise Exception(
+                f"Request failed with status code {response.status_code}: {response.text}"
+            )
+        result = response.json()
+
+        return next(
+            item["content"][0]["text"]
+            for item in result["outputs"]
+            if item["type"] == "message" and item.get("content")
+        )
+
     # async def model_serving_model(self, user_message: str) -> str:
-    #     payload = {"inputs": [{"role": "user", "content": user_message}]}
-    #     headers = {
-    #         "Authorization": f"Bearer {self.DATABRICKS_TOKEN}",
-    #         "Content-Type": "application/json",
-    #     }
-    #     response = requests.post(
-    #         self.AGENT_ENDPOINT, headers=headers, json=payload, timeout=60
-    #     )
-    #     if response.status_code != 200:
-    #         raise Exception(
-    #             f"Request failed with status code {response.status_code}: {response.text}"
-    #         )
-    #     result = response.json()
-
-    #     return next(
-    #         item["content"][0]["text"]
-    #         for item in result["outputs"]
-    #         if item["type"] == "message" and item.get("content")
-    #     )
-
-    def model_serving_model(self, user_message: str) -> str:
-        return f"The exchange rate for {user_message} YES"
+    #     return f"The exchange rate for {user_message} YES"
     async def execute(
         self,
         context: RequestContext,

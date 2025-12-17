@@ -107,7 +107,7 @@ async def main() -> None:
         send_message_payload: dict[str, Any] = {
             "message": {
                 "role": "user",
-                "parts": [{"kind": "text", "text": "<eneter your query here"}],
+                "parts": [{"kind": "text", "text": "<eneter your query here>"}],
                 "message_id": uuid4().hex,
             },
         }
