@@ -1,4 +1,3 @@
-SP_SCOPE_NAME = "<enter your scope name here>"
 SP_CLIENT_ID = "<enter your client id here>"
 SP_CLIENT_SECRE = "<enter your client secret here>"
 CATALOG_NAME = "<enter your catalog name here>"
