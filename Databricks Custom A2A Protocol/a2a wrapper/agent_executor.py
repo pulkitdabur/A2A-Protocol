@@ -17,8 +17,7 @@ from a2a.utils import (
     new_task,
 )
 from a2a.utils.errors import ServerError
-from config import AGENT_ENDPOINT, SCOPE_NAME, TOKEN
-from databricks.sdk import WorkspaceClient
+from config import AGENT_ENDPOINT
 
 # w = WorkspaceClient()
 # dbutils = w.dbutils
